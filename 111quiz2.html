@@ -1,0 +1,284 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minibeast Interactive Quiz - FS1</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Comfortaa:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-green: #4ade80;
+            --dark-green: #166534;
+            --bg-color: #f0fdf4;
+            --card-bg: #ffffff;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 20px;
+            font-family: 'Comfortaa', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .slide {
+            background: white;
+            width: 90vw;
+            max-width: 1000px;
+            min-height: 600px;
+            border-radius: 40px;
+            border: 10px solid var(--primary-green);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+            margin-bottom: 50px;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        h1 {
+            font-family: 'Fredoka One', cursive;
+            font-size: clamp(40px, 8vw, 80px);
+            color: var(--dark-green);
+            text-align: center;
+            margin: 0;
+        }
+
+        .question-text {
+            font-family: 'Fredoka One', cursive;
+            font-size: clamp(28px, 6vw, 48px);
+            color: #15803d;
+            margin-bottom: 40px;
+            text-align: center;
+            background: #dcfce7;
+            padding: 15px 30px;
+            border-radius: 20px;
+        }
+
+        .options-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            width: 100%;
+        }
+
+        .option-card {
+            background: #f8fafc;
+            border: 6px solid #e2e8f0;
+            border-radius: 30px;
+            padding: 25px;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        .option-card:hover {
+            transform: scale(1.05);
+            border-color: var(--primary-green);
+        }
+
+        .option-card img {
+            width: 100%;
+            aspect-ratio: 1/1;
+            object-fit: contain;
+            pointer-events: none;
+        }
+
+        .feedback-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 100px;
+            border-radius: 24px;
+            background: rgba(255,255,255,0.85);
+            z-index: 2;
+        }
+
+        /* Interaction States */
+        .option-card.clicked-correct {
+            border-color: #22c55e;
+            background: #dcfce7;
+        }
+        .option-card.clicked-correct .feedback-overlay {
+            display: flex;
+            color: #22c55e;
+        }
+
+        .option-card.clicked-wrong {
+            border-color: #ef4444;
+            background: #fee2e2;
+        }
+        .option-card.clicked-wrong .feedback-overlay {
+            display: flex;
+            color: #ef4444;
+        }
+
+        .play-btn {
+            padding: 20px 40px;
+            font-size: 28px;
+            font-family: 'Fredoka One', cursive;
+            border-radius: 50px;
+            background: #f59e0b;
+            color: white;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 10px 0 #b45309;
+            transition: all 0.1s;
+            margin-top: 20px;
+        }
+
+        .play-btn:active {
+            transform: translateY(5px);
+            box-shadow: 0 5px 0 #b45309;
+        }
+
+        @media (max-width: 768px) {
+            .options-container { grid-template-columns: 1fr; }
+            .slide { padding: 20px; }
+            .option-card img { max-width: 150px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Slide 1: Title -->
+    <div class="slide">
+        <h1>🐞 Fun Minibeast Quiz 🐛</h1>
+        <p style="font-size: 24px; color: #166534; font-weight: bold; margin: 20px 0;">Look at the pictures and tap!</p>
+        <div style="font-size: 80px; margin: 20px;">🦋 🐝 🐌</div>
+        <button class="play-btn" onclick="document.getElementById('q1').scrollIntoView({behavior: 'smooth'})">START! ▶️</button>
+    </div>
+
+    <!-- Slide 2: Butterfly -->
+    <div class="slide" id="q1">
+        <div class="question-text">Which one is a butterfly?</div>
+        <div class="options-container">
+            <div class="option-card" onclick="handleResult(this, false)">
+                <img src="https://openmoji.org/data/color/svg/1F41C.svg" alt="Ant">
+                <div class="feedback-overlay">❌</div>
+            </div>
+            <div class="option-card" onclick="handleResult(this, true)">
+                <img src="https://openmoji.org/data/color/svg/1F98B.svg" alt="Butterfly">
+                <div class="feedback-overlay">✅</div>
+            </div>
+            <div class="option-card" onclick="handleResult(this, false)">
+                <img src="https://openmoji.org/data/color/svg/1F41D.svg" alt="Bee">
+                <div class="feedback-overlay">❌</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 3: Fly -->
+    <div class="slide">
+        <div class="question-text">Which one can fly?</div>
+        <div class="options-container">
+            <div class="option-card" onclick="handleResult(this, false)">
+                <img src="https://openmoji.org/data/color/svg/1F41B.svg" alt="Caterpillar">
+                <div class="feedback-overlay">❌</div>
+            </div>
+            <div class="option-card" onclick="handleResult(this, true)">
+                <img src="https://openmoji.org/data/color/svg/1F41E.svg" alt="Ladybird">
+                <div class="feedback-overlay">✅</div>
+            </div>
+            <div class="option-card" onclick="handleResult(this, false)">
+                <img src="https://openmoji.org/data/color/svg/1F40C.svg" alt="Snail">
+                <div class="feedback-overlay">❌</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 4: Slow -->
+    <div class="slide">
+        <div class="question-text">Which one is slow?</div>
+        <div class="options-container">
+            <div class="option-card" onclick="handleResult(this, true)">
+                <img src="https://openmoji.org/data/color/svg/1F40C.svg" alt="Snail">
+                <div class="feedback-overlay">✅</div>
+            </div>
+            <div class="option-card" onclick="handleResult(this, false)">
+                <img src="https://openmoji.org/data/color/svg/1F41D.svg" alt="Bee">
+                <div class="feedback-overlay">❌</div>
+            </div>
+            <div class="option-card" onclick="handleResult(this, false)">
+                <img src="https://openmoji.org/data/color/svg/1F98B.svg" alt="Butterfly">
+                <div class="feedback-overlay">❌</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 5: Web -->
+    <div class="slide">
+        <div class="question-text">Who makes a web?</div>
+        <div class="options-container">
+            <div class="option-card" onclick="handleResult(this, true)">
+                <img src="https://openmoji.org/data/color/svg/1F577.svg" alt="Spider">
+                <div class="feedback-overlay">✅</div>
+            </div>
+            <div class="option-card" onclick="handleResult(this, false)">
+                <img src="https://openmoji.org/data/color/svg/1F41E.svg" alt="Ladybird">
+                <div class="feedback-overlay">❌</div>
+            </div>
+            <div class="option-card" onclick="handleResult(this, false)">
+                <img src="https://openmoji.org/data/color/svg/1F41D.svg" alt="Bee">
+                <div class="feedback-overlay">❌</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 6: Green -->
+    <div class="slide">
+        <div class="question-text">Which one is green?</div>
+        <div class="options-container">
+            <div class="option-card" onclick="handleResult(this, true)">
+                <img src="https://openmoji.org/data/color/svg/1F41B.svg" alt="Caterpillar">
+                <div class="feedback-overlay">✅</div>
+            </div>
+            <div class="option-card" onclick="handleResult(this, false)">
+                <img src="https://openmoji.org/data/color/svg/1F41D.svg" alt="Bee">
+                <div class="feedback-overlay">❌</div>
+            </div>
+            <div class="option-card" onclick="handleResult(this, false)">
+                <img src="https://openmoji.org/data/color/svg/1F577.svg" alt="Spider">
+                <div class="feedback-overlay">❌</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- End Slide -->
+    <div class="slide">
+        <h1>🎉 Great Job! 🎉</h1>
+        <p class="question-text" style="background: none;">You found all the bugs!</p>
+        <div style="font-size: 100px; margin-bottom: 20px;">🏆</div>
+        <button class="play-btn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" style="background: var(--dark-green); box-shadow: 0 10px 0 #052e16;">Play Again 🔄</button>
+    </div>
+
+    <script>
+        function handleResult(element, isCorrect) {
+            // Remove previous classes in case user clicks multiple times
+            element.classList.remove('clicked-correct', 'clicked-wrong');
+            
+            if (isCorrect) {
+                element.classList.add('clicked-correct');
+            } else {
+                element.classList.add('clicked-wrong');
+                // Auto-hide wrong answer after a second so they can try again
+                setTimeout(() => {
+                    element.classList.remove('clicked-wrong');
+                }, 1000);
+            }
+        }
+    </script>
+</body>
+</html>
